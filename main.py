@@ -11,6 +11,12 @@ from keyboards import (
     kvadrat_menyu, jihoz1_menyu, jihoz2_menyu, jihoz3_menyu,
     muddat_menyu, telefon_menyu
 )
+from aiogram.client.session.aiohttp import AiohttpSession
+
+
+PROXY_URL = 'http://proxy.server:3128'
+session = AiohttpSession(proxy=PROXY_URL)
+
 from database import create_db, save_to_db
 
 
@@ -18,8 +24,9 @@ API_TOKEN = "8756438916:AAH0PKpxszlao4ixhUCbyBO7FLqoqbeHX5k"
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot(token=API_TOKEN)
+# bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
+bot = Bot(token=API_TOKEN, session=session)
 
 
 class IjaraBerish(StatesGroup):
