@@ -1,5 +1,4 @@
 import aiosqlite
-import asyncio
 
 async def create_db():
     async with aiosqlite.connect("ijara.db") as conn:

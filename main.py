@@ -22,7 +22,6 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 
 
-# ================= FSM =================
 class IjaraBerish(StatesGroup):
     tur = State()
     xona = State()
@@ -37,18 +36,14 @@ class IjaraBerish(StatesGroup):
     telefon = State()
 
 
-# ================= START =================
 @dp.message(Command("start"))
 async def start_handler(message: types.Message, state: FSMContext):
-    # Avval foydalanuvchining oldingi FSM holatini tozalaymiz
     await state.clear()
     await message.answer("Botga xush kelibsiz 😊", reply_markup=main_menu())
 
 
-# ================= IJARAGA BERAMAN =================
 @dp.message(F.text == "Ijaraga beraman")
 async def beraman_handler(message: types.Message, state: FSMContext):
-    # Agar foydalanuvchi allaqachon jarayonda bo'lsa, duplicate xabar bermaymiz
     current_state = await state.get_state()
     if current_state is not None:
         await message.answer("Siz allaqachon jarayondasiz! ✅")
@@ -61,7 +56,6 @@ async def beraman_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.tur)
 
 
-# ================= TUR =================
 @dp.message(IjaraBerish.tur)
 async def tur_handler(message: types.Message, state: FSMContext):
     await state.update_data(tur=message.text)
@@ -75,7 +69,6 @@ async def tur_handler(message: types.Message, state: FSMContext):
         await state.set_state(IjaraBerish.kvadrat)
 
 
-# ================= XONA =================
 @dp.message(IjaraBerish.xona)
 async def xona_handler(message: types.Message, state: FSMContext):
     await state.update_data(xona=message.text)
@@ -83,7 +76,6 @@ async def xona_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.tuman)
 
 
-# ================= TUMAN =================
 @dp.message(IjaraBerish.tuman)
 async def tuman_handler(message: types.Message, state: FSMContext):
     await state.update_data(tuman=message.text)
@@ -91,7 +83,6 @@ async def tuman_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.kvadrat)
 
 
-# ================= KVADRAT =================
 @dp.message(IjaraBerish.kvadrat)
 async def kvadrat_handler(message: types.Message, state: FSMContext):
     await state.update_data(kvadrat=message.text)
@@ -102,7 +93,6 @@ async def kvadrat_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.jihoz1)
 
 
-# ================= JIHOZ 1 =================
 @dp.message(IjaraBerish.jihoz1)
 async def jihoz1_handler(message: types.Message, state: FSMContext):
     await state.update_data(jihoz1=message.text)
@@ -113,7 +103,6 @@ async def jihoz1_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.jihoz2)
 
 
-# ================= JIHOZ 2 =================
 @dp.message(IjaraBerish.jihoz2)
 async def jihoz2_handler(message: types.Message, state: FSMContext):
     await state.update_data(jihoz2=message.text)
@@ -124,7 +113,6 @@ async def jihoz2_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.jihoz3)
 
 
-# ================= JIHOZ 3 =================
 @dp.message(IjaraBerish.jihoz3)
 async def jihoz3_handler(message: types.Message, state: FSMContext):
     await state.update_data(jihoz3=message.text)
@@ -132,7 +120,6 @@ async def jihoz3_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.muddat)
 
 
-# ================= MUDDAT =================
 @dp.message(IjaraBerish.muddat)
 async def muddat_handler(message: types.Message, state: FSMContext):
     await state.update_data(muddat=message.text)
@@ -140,7 +127,6 @@ async def muddat_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.narx)
 
 
-# ================= NARX =================
 @dp.message(IjaraBerish.narx)
 async def narx_handler(message: types.Message, state: FSMContext):
     await state.update_data(narx=message.text)
@@ -148,7 +134,6 @@ async def narx_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.rasm)
 
 
-# ================= RASM =================
 @dp.message(IjaraBerish.rasm, F.photo)
 async def rasm_handler(message: types.Message, state: FSMContext):
     await state.update_data(photo=message.photo[-1].file_id)
@@ -156,7 +141,6 @@ async def rasm_handler(message: types.Message, state: FSMContext):
     await state.set_state(IjaraBerish.telefon)
 
 
-# ================= TELEFON =================
 @dp.message(IjaraBerish.telefon, F.contact)
 async def telefon_handler(message: types.Message, state: FSMContext):
     data = await state.get_data()
@@ -186,7 +170,6 @@ async def telefon_handler(message: types.Message, state: FSMContext):
     await state.clear()
 
 
-# ================= RUN =================
 async def main():
     await create_db()
     await dp.start_polling(bot)
